@@ -11,7 +11,7 @@ sys.path.append(os.pardir)
 
 #config
 LOGIN_ACCOUNTNAME = "matuki_no_ukiwa"
-LOGIN_PASSWORD = "uranus"
+LOGIN_PASSWORD = ""
 driver=webdriver.Chrome('/Users/fenganling/Downloads/chromedriver')
 
 
