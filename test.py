@@ -20,3 +20,8 @@ def checkFourNumDataBank(acount_name):
 checkDataBank("@tomoyuki1992121")
 checkFourNumDataBank("tomoyuki1992121")
 
+checkDataBank("おっぱい")
+checkFourNumDataBank("おっぱい")
+
+
+checkFourNumDataBank("@kuromailserver_1")

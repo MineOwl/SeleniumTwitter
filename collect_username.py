@@ -14,7 +14,7 @@ import sys
 
 if __name__=="__main__":
     args = sys.argv
-    acount_name = "@tomoyuki1992121"
+    acount_name = "@kuromailserver"
     acountPickleControler = AcountPickleControler(acount_name)
     if len(args) > 2:
         acount_name = args[1]

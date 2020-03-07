@@ -9,7 +9,7 @@ from queue import Queue
 import traceback
 
 Data = []
-acount_name = "@tomoyuki1992121"
+acount_name = "@kuromailserver"
 
 
 q = Queue()

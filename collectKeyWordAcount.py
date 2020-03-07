@@ -1,6 +1,6 @@
 from TwitterDriver.TwitterDriver import TwitterDriver
 from TwitterDriver.GoFollowerDriver import GoFollowerDriver
-from TwitterDriver.GoSeachPageDriver import GoSeachPageDriver
+from SeleniumTwitter.TwitterDriver.GoSearchPageDriver import GoSeachPageDriver
 from TwitterDriver.CollectAtmarksDriver import CollectAtmarksDriver
 from bs4 import BeautifulSoup
 from TwitterDriver.TwitterDriver import driver

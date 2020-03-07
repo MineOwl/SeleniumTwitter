@@ -146,16 +146,45 @@ def search_dispersion(acount):
         print("more 4000 count:", count_4000_row )
         print("more 6000 count:", count_6000_row)
         
+def does_can_separate(acount1, acount2):
+    X1, labels = build_X(acount1)
+    X2, labels = build_X(acount2)
 
+    X = []
+    X.extend(X1)
+    X.extend(X2)
+
+    y = []
+    y.extend( np.zeros_like( ( np.array(X1).T[0]) ) )
+    y.extend( np.ones_like( ( np.array(X2).T[1]) ) )
+
+
+    print(len(X))
+    print(len(y))
+
+    X_train, x_test, y_train, y_test = train_test_split(X, y)
+
+    forest = RandomForestClassifier()
+    forest.fit(X_train, y_train)
+    print(forest.score(x_test, y_test))
+
+    def plot_feature_importances( feature_list , labels ):
+        feature_list = np.array(feature_list)
+        plt.bar(labels, feature_list)
+        plt.show()
+
+    print(forest.feature_importances_)
+    plot_feature_importances(forest.feature_importances_, labels)
 
 
     
 
 
-
+acounts = ["@kuromailserver_1", "tomoyuki1992121","matuki_no_ukiwa1"]
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
-search_dispersion("naokich48445315_follower1")
-plot_two_acount("naokich48445315_follower1", "matuki_no_ukiwa1")
+#search_dispersion(acounts[0])
+#plot_two_acount(acounts[0], acounts[1])
+does_can_separate(acounts[0], acounts[1])
 #search_dispersion("tomoyuki1992121")
 #plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
