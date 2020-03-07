@@ -141,7 +141,7 @@ def search_dispersion(acount):
         for cell in row:
             if cell > 6000:
                 count_6000_row += 1
-            if cell > 4000:
+            if cell > 4700:
                 count_4000_row += 1
         print("more 4000 count:", count_4000_row )
         print("more 6000 count:", count_6000_row)
@@ -155,7 +155,7 @@ def search_dispersion(acount):
 
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
-
-#plot_two_acount("naokich48445315_follower1", "matuki_no_ukiwa1")
+search_dispersion("naokich48445315_follower1")
+plot_two_acount("naokich48445315_follower1", "matuki_no_ukiwa1")
 #search_dispersion("tomoyuki1992121")
-plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
+#plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
