@@ -18,4 +18,5 @@ def checkFourNumDataBank(acount_name):
     print(count)
 
 checkDataBank("@tomoyuki1992121")
-checkFourNumDataBank("@tomoyuki1992121")
+checkFourNumDataBank("tomoyuki1992121")
+

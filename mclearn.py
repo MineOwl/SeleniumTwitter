@@ -61,11 +61,10 @@ def build_X(acount_name):
         following = four_num[2]
         followers = four_num[3] 
         favorites = four_num[4]
-        X.append( [tweets, followers, following, favorites] )
+        X.append( [tweets, following, followers, favorites] )
 
-        followers_labeled = make_class(followers, labels)
-        print(followers_labeled)
-    return X, ["tweets", "followers", "following", "favorites"]
+
+    return X, ["tweets", "following", "follower", "favorites"]
 
 
 
@@ -117,11 +116,46 @@ def plot_two_acount(acount1, acount2):
             plot_graph(x1, y1, x2, y2, labels[i], labels[j])
 
 
+def search_dispersion(acount):
+    
+    X,  labels = build_X(acount)
+
+    import pandas as pd
+
+    print( pd.DataFrame(pd.Series(np.array(X).ravel()).describe()).transpose() )
+
+    for i, label in enumerate(labels):
+        print(label)
+        
+        print(np.array(X))
+
+
+        row = np.array(X).T[i]
+
+        print( pd.DataFrame(pd.Series(row.ravel()).describe()).transpose() )
+
+        print(sum(row)/len(row))
+
+        count_4000_row = 0
+        count_6000_row = 0
+        for cell in row:
+            if cell > 6000:
+                count_6000_row += 1
+            if cell > 4000:
+                count_4000_row += 1
+        print("more 4000 count:", count_4000_row )
+        print("more 6000 count:", count_6000_row)
+        
+
+
+
+    
 
 
 
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
 
-plot_two_acount("naokich48445315_follower1", "matuki_no_ukiwa1")
-
+#plot_two_acount("naokich48445315_follower1", "matuki_no_ukiwa1")
+#search_dispersion("tomoyuki1992121")
+plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
