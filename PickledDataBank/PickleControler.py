@@ -37,5 +37,12 @@ class AcountPickleControler(PickleControler):
     def load_acount_database(self):
         return self.load(self.path)
     
+    def load_clear_acount_database(self):
+        dba = []
+        for name in self.load_acount_database():
+            if name.startswith("@"):
+                dba.append(name)
+        return dba
+        
     def dump_acount_database(self, obj):
         self.dump(obj, self.path)

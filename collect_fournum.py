@@ -1,6 +1,6 @@
-from unzip_pickle import unzip_clear_pickle
+
 from TwitterUrllibInspector.FourNum import get_four_number_sleep1
-from PickledDataBank.PickleControler import FourNumControler
+from PickledDataBank.PickleControler import FourNumControler, AcountPickleControler
 import time
 import random
 import pickle
@@ -9,20 +9,22 @@ from queue import Queue
 import traceback
 
 Data = []
-acount_name = "matuki_no_ukiwa1"
+acount_name = "@tomoyuki1992121"
 
 
 q = Queue()
 
+acountPickleControler = AcountPickleControler(acount_name)
 
-for atmark_code in list(unzip_clear_pickle(acount_name)):
+for atmark_code in acountPickleControler.load_acount_database():
     q.put(atmark_code)
 
 fourNumControler = FourNumControler(acount_name)
 while not q.empty():
+    atmark = q.get()
     try:
         four_num_and_atmarkcode = []
-        atmark = q.get()
+        
         four_num_and_atmarkcode.append(atmark)
         four_num_and_atmarkcode.extend( get_four_number_sleep1(atmark) )
         print(four_num_and_atmarkcode)
@@ -31,6 +33,7 @@ while not q.empty():
     except KeyboardInterrupt:
         break
     except:
+        q.put(atmark)
         fourNumControler.dump_four_num(Data)
         traceback.print_exc()
 

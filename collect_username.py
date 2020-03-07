@@ -14,7 +14,7 @@ import sys
 
 if __name__=="__main__":
     args = sys.argv
-    acount_name = "@matuki_no_ukiwa"
+    acount_name = "@tomoyuki1992121"
     acountPickleControler = AcountPickleControler(acount_name)
     if len(args) > 2:
         acount_name = args[1]
@@ -37,7 +37,7 @@ if __name__=="__main__":
 
     #あまり褒められたコードではない,
     #気をつけて！
-    for i in range(30):
+    for i in range(100000):
         try:
             collectAtmarksDriver.get_acounts_info_yield()
         except KeyboardInterrupt:
