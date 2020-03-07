@@ -13,8 +13,6 @@ from sklearn.cross_validation import train_test_split
 2,
 """
 
-folder_path = "PickledDataBank/FourNumDataBank"
-
 
 
 def build_X_y(acount_name):
@@ -45,9 +43,35 @@ def build_X_y(acount_name):
     return X, y, ["tweets", "following", "favorites"]
 
 
+def build_X(acount_name):
+
+    fourNumControler = FourNumControler(acount_name)
+    X = []
+    labels = range(0, 500,  100)
+    print(len(labels))
+
+    def make_class(num, labels):
+        for index, label in enumerate( labels ):
+            if num < label:
+                return index
+        return len(labels)
+
+    for four_num in fourNumControler.load_four_num():
+        tweets = four_num[1]
+        following = four_num[2]
+        followers = four_num[3] 
+        favorites = four_num[4]
+        X.append( [tweets, followers, following, favorites] )
+
+        followers_labeled = make_class(followers, labels)
+        print(followers_labeled)
+    return X, ["tweets", "followers", "following", "favorites"]
+
+
+
 def random_forest_analysis(acount_name):
 
-    X, y = build_X_y(acount_name)
+    X, y, labels = build_X_y(acount_name)
     X_train, x_test, y_train, y_test = train_test_split(X, y)
 
     forest = RandomForestClassifier()
@@ -60,14 +84,14 @@ def random_forest_analysis(acount_name):
         plt.show()
 
     print(forest.feature_importances_)
-    plot_feature_importances(forest.feature_importances_, ["tweets", "following", "favorites"])
+    plot_feature_importances(forest.feature_importances_, labels)
 
 
 
-def compare_two_account(acount1, acount2):
+def plot_two_acount(acount1, acount2):
 
-    X1, y1, labels = build_X_y(acount1)
-    X2, y2, labels = build_X_y(acount2)
+    X1,  labels = build_X(acount1)
+    X2, labels = build_X(acount2)
 
     def plot_graph(x1, y1, x2, y2, x_label, y_label):
         plt.title("moon")
@@ -79,16 +103,25 @@ def compare_two_account(acount1, acount2):
         plt.legend()
         plt.show()
     
-    x1 = np.array(X1).T[0] 
-    y1 = np.array(X1).T[1]
+    #plot_all_combination
+    for i in range(0, len(labels)):
+        for j in range(0,len(labels)):
+            print(i,j)
+            if(i>=j):
+                continue
+            x1 = np.array(X1).T[i] 
+            y1 = np.array(X1).T[j]
 
-    x2 = np.array(X2).T[0]
-    y2 = np.array(X2).T[1]
-    plot_graph(x1, y1, x2, y2, labels[0], labels[1])
+            x2 = np.array(X2).T[i]
+            y2 = np.array(X2).T[j]
+            plot_graph(x1, y1, x2, y2, labels[i], labels[j])
+
+
+
 
 
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
 
-compare_two_account("naokich48445315_follower1", "matuki_no_ukiwa1")
+plot_two_acount("naokich48445315_follower1", "matuki_no_ukiwa1")
 
