@@ -29,6 +29,13 @@ class TwitterDriver():
         element=self.driver.find_elements_by_xpath('//input[@autocapitalize="none"]')[1]
         element.send_keys(password)
         element.send_keys(Keys.ENTER)
+    
+    def login_manually(self):
+        url="https://twitter.com/login/error?username_or_email=%40"
+        accountname=LOGIN_ACCOUNTNAME
+        self.driver.get(url+accountname)
+        time.sleep(1)
+        _ = input("push enter_key after input password")
 
     def close(self):
         self.driver.close()
