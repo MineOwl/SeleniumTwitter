@@ -17,6 +17,7 @@ def checkFourNumDataBank(acount_name):
         count += 1
     print(count)
 
+"""
 checkDataBank("@tomoyuki1992121")
 checkFourNumDataBank("tomoyuki1992121")
 
@@ -25,3 +26,5 @@ checkFourNumDataBank("おっぱい")
 
 
 checkFourNumDataBank("@kuromailserver_1")
+"""
+checkFourNumDataBank("病み")

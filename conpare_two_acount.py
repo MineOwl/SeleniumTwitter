@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cross_validation import train_test_split
 
+
+
 """
 このコードは
 1,
@@ -101,6 +103,8 @@ def search_dispersion(acount):
     import pandas as pd
     print( pd.DataFrame(pd.Series(np.array(X).ravel()).describe()).transpose() )
 
+    return pd.Series(np.array(X).ravel()).describe()
+
 
 def does_can_separate(acount1, acount2):
     X1, labels = build_X(acount1)
@@ -130,39 +134,68 @@ def does_can_separate(acount1, acount2):
     plot_feature_importances(forest.feature_importances_, labels)
 
 
-def build_report(acount):
-    from rattlepy.templating import (
-    html, body, head,
-    title, h1, p, div, span, text,
-    meta, link)
+def outlier_iqr(df):
 
-    with html(lang='ja') as elem:
-        with head():
-            meta(charset='utf-8')
-            meta(name='viewport', content='initial-scale=1.0;width=device-width')
-            link(href='main.css', rel='stylesheet', type='text/css')
-            with title():
-                text("Hello, Rattle.py!")
-        with body():
-            with div(className='container'):
-                with h1(): 
-                    text("Hello, Rattle.py!")
-                    with p():
-                        text("Rattle.py is a html templating library.")
-                        with span(className='emphasized'):
-                            text("This library can support you to make HTML in pure Python.")
+    for i in range(len(df.columns)):
 
-    print(elem)
-    
+        # 列を抽出する
+        col = df.iloc[:,i]
 
+        # 四分位数
+        q1 = col.describe()['25%']
+        q2 = col.describe()['50%']
+        q3 = col.describe()['75%']
+        iqr = q3 - q1 #四分位範囲
+
+        # 外れ値の基準点
+        outlier_min = q1 - (iqr) * 1.5
+        outlier_max = q3 + (iqr) * 1.5
+
+        # 範囲から外れている値を除く
+        col[col < outlier_min] = None
+        col[col > outlier_max] = None
+
+    return df
+
+
+def build_report(acount1, acount2):
+    import pandas as pd
+    import pandas_profiling
+    X1, labels = build_X(acount1)
+    X2, labels = build_X(acount2)
+    df1 = pd.DataFrame(X1)
+
+    df2 = pd.DataFrame(X2)
+
+    df1 = outlier_iqr(df1)
+    profile_report = pandas_profiling.ProfileReport(df1)
+    profile_report.to_file("report.html")
+
+
+
+    from jinja2 import Template
+    html= ""
+    with open("./MyHtmlTemplete/test.html") as f:
+        html = f.read()
+
+
+    template = Template(html)
+    data = {
+    'a_variable' : 'わっふる',
+    'navigation' : [
+        {'href':'http://hogehoge1', 'caption': 'test1'},
+        {'href':'http://hogehoge2', 'caption': 'test2'}
+    ]
+    }
+    print (template.render(data))
 
 acounts = ["@kuromailserver_1", "tomoyuki1992121","matuki_no_ukiwa1"]
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
-search_dispersion(acounts[0])
+print (search_dispersion(acounts[0]) )
 search_dispersion(acounts[1])
 #plot_two_acount(acounts[0], acounts[1])
-does_can_separate(acounts[0], acounts[1])
+#does_can_separate(acounts[0], acounts[1])
 #search_dispersion("tomoyuki1992121")
 #plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
-build_report(1)
+build_report(acounts[0], acounts[1])

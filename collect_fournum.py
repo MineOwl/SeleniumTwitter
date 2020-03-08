@@ -9,7 +9,7 @@ from queue import Queue
 import traceback
 
 Data = []
-acount_name = "フォロバ"
+acount_name = "病み"
 
 
 q = Queue()
