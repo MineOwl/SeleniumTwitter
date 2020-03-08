@@ -18,6 +18,8 @@ from sklearn.cross_validation import train_test_split
 def build_X(acount_name):
 
     fourNumControler = FourNumControler(acount_name)
+
+    
     X = []
     labels = range(0, 500,  100)
     print(len(labels))
@@ -168,6 +170,13 @@ def build_report(acount1, acount2):
     df2 = pd.DataFrame(X2)
 
     df1 = outlier_iqr(df1)
+
+    df1 =  df1.rename(columns={
+        0:"tweets",
+        1:"following",
+        2:"follower",
+        3: "favorites"
+    })
     profile_report = pandas_profiling.ProfileReport(df1)
     profile_report.to_file("report.html")
 
@@ -189,13 +198,14 @@ def build_report(acount1, acount2):
     }
     print (template.render(data))
 
-acounts = ["@kuromailserver_1", "tomoyuki1992121","matuki_no_ukiwa1"]
+acounts = ["病み", "リア充","@kuromailserver_1", "tomoyuki1992121","matuki_no_ukiwa1"]
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
-print (search_dispersion(acounts[0]) )
-search_dispersion(acounts[1])
+#print (search_dispersion(acounts[0]) )
+#search_dispersion(acounts[1])
 #plot_two_acount(acounts[0], acounts[1])
 #does_can_separate(acounts[0], acounts[1])
 #search_dispersion("tomoyuki1992121")
 #plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
 build_report(acounts[0], acounts[1])
+
