@@ -15,7 +15,7 @@ import sys
 
 if __name__=="__main__":
     args = sys.argv
-    search_keyword = "おっぱい"
+    search_keyword = "病み"
     acountPickleControler = AcountPickleControler(search_keyword)
     if len(args) > 2:
         acount_name = args[1]

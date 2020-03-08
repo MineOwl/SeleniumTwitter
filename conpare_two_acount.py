@@ -13,36 +13,6 @@ from sklearn.cross_validation import train_test_split
 2,
 """
 
-
-
-def build_X_y(acount_name):
-
-    fourNumControler = FourNumControler(acount_name)
-    X = []
-    y = []
-
-    labels = range(0, 500,  100)
-    print(len(labels))
-
-    def make_class(num, labels):
-        for index, label in enumerate( labels ):
-            if num < label:
-                return index
-        return len(labels)
-
-    for four_num in fourNumControler.load_four_num():
-        tweets = four_num[1]
-        following = four_num[2]
-        followers = four_num[3] 
-        favorites = four_num[4]
-        X.append( [tweets, following, favorites] )
-
-        followers_labeled = make_class(followers, labels)
-        print(followers_labeled)
-        y.append( followers_labeled )
-    return X, y, ["tweets", "following", "favorites"]
-
-
 def build_X(acount_name):
 
     fourNumControler = FourNumControler(acount_name)
@@ -68,22 +38,33 @@ def build_X(acount_name):
 
 
 
-def random_forest_analysis(acount_name):
 
-    X, y, labels = build_X_y(acount_name)
-    X_train, x_test, y_train, y_test = train_test_split(X, y)
 
-    forest = RandomForestClassifier()
-    forest.fit(X_train, y_train)
-    print(forest.score(x_test, y_test))
+def build_X_y(acount_name):
 
-    def plot_feature_importances( feature_list , labels ):
-        feature_list = np.array(feature_list)
-        plt.bar(labels, feature_list)
-        plt.show()
+    fourNumControler = FourNumControler(acount_name)
+    X = []
+    y = []
 
-    print(forest.feature_importances_)
-    plot_feature_importances(forest.feature_importances_, labels)
+    labels = range(0, 500,  100)
+
+    def make_class(num, labels):
+        for index, label in enumerate( labels ):
+            if num < label:
+                return index
+        return len(labels)
+
+    for four_num in fourNumControler.load_four_num():
+        tweets = four_num[1]
+        following = four_num[2]
+        followers = four_num[3] 
+        favorites = four_num[4]
+        X.append( [tweets, following, favorites] )
+
+        followers_labeled = make_class(followers, labels)
+        y.append( followers_labeled )
+    return X, y, ["tweets", "following", "favorites"]
+
 
 
 
@@ -105,7 +86,6 @@ def plot_two_acount(acount1, acount2):
     #plot_all_combination
     for i in range(0, len(labels)):
         for j in range(0,len(labels)):
-            print(i,j)
             if(i>=j):
                 continue
             x1 = np.array(X1).T[i] 
@@ -117,35 +97,9 @@ def plot_two_acount(acount1, acount2):
 
 
 def search_dispersion(acount):
-    
     X,  labels = build_X(acount)
-
     import pandas as pd
-
     print( pd.DataFrame(pd.Series(np.array(X).ravel()).describe()).transpose() )
-
-    for i, label in enumerate(labels):
-        print(label)
-        
-        print(np.array(X))
-
-
-        row = np.array(X).T[i]
-
-        print( pd.DataFrame(pd.Series(row.ravel()).describe()).transpose() )
-
-        print(sum(row)/len(row))
-
-        count_4000_row = 0
-        count_6000_row = 0
-        for cell in row:
-            if cell > 6000:
-                count_6000_row += 1
-            if cell > 4700:
-                count_4000_row += 1
-        print("more 4000 count:", count_4000_row )
-        print("more 6000 count:", count_6000_row)
-
 
 
 def does_can_separate(acount1, acount2):
@@ -160,8 +114,6 @@ def does_can_separate(acount1, acount2):
     y.extend( np.zeros_like( ( np.array(X1).T[0]) ) )
     y.extend( np.ones_like( ( np.array(X2).T[1]) ) )
 
-    print(len(X))
-    print(len(y))
 
     X_train, x_test, y_train, y_test = train_test_split(X, y)
 
@@ -178,14 +130,39 @@ def does_can_separate(acount1, acount2):
     plot_feature_importances(forest.feature_importances_, labels)
 
 
+def build_report(acount):
+    from rattlepy.templating import (
+    html, body, head,
+    title, h1, p, div, span, text,
+    meta, link)
+
+    with html(lang='ja') as elem:
+        with head():
+            meta(charset='utf-8')
+            meta(name='viewport', content='initial-scale=1.0;width=device-width')
+            link(href='main.css', rel='stylesheet', type='text/css')
+            with title():
+                text("Hello, Rattle.py!")
+        with body():
+            with div(className='container'):
+                with h1(): 
+                    text("Hello, Rattle.py!")
+                    with p():
+                        text("Rattle.py is a html templating library.")
+                        with span(className='emphasized'):
+                            text("This library can support you to make HTML in pure Python.")
+
+    print(elem)
     
 
 
 acounts = ["@kuromailserver_1", "tomoyuki1992121","matuki_no_ukiwa1"]
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
-#search_dispersion(acounts[0])
+search_dispersion(acounts[0])
+search_dispersion(acounts[1])
 #plot_two_acount(acounts[0], acounts[1])
 does_can_separate(acounts[0], acounts[1])
 #search_dispersion("tomoyuki1992121")
 #plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
+build_report(1)
