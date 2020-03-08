@@ -124,27 +124,6 @@ def search_dispersion(acount):
 
     print( pd.DataFrame(pd.Series(np.array(X).ravel()).describe()).transpose() )
 
-    for i, label in enumerate(labels):
-        print(label)
-        
-        print(np.array(X))
-
-
-        row = np.array(X).T[i]
-
-        print( pd.DataFrame(pd.Series(row.ravel()).describe()).transpose() )
-
-        print(sum(row)/len(row))
-
-        count_4000_row = 0
-        count_6000_row = 0
-        for cell in row:
-            if cell > 6000:
-                count_6000_row += 1
-            if cell > 4700:
-                count_4000_row += 1
-        print("more 4000 count:", count_4000_row )
-        print("more 6000 count:", count_6000_row)
 
 
 

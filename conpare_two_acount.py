@@ -136,76 +136,65 @@ def does_can_separate(acount1, acount2):
     plot_feature_importances(forest.feature_importances_, labels)
 
 
-def outlier_iqr(df):
+def threshold(data):
+    data = np.array(data)
+    #tweets
+    rwo_tweets = data.T[0]
 
-    for i in range(len(df.columns)):
+    rwo_tweets[rwo_tweets > 2000] = 2000
 
-        # 列を抽出する
-        col = df.iloc[:,i]
+    #following
+    row_following = data.T[1]
+    row_following[row_following > 2000] = 2000
 
-        # 四分位数
-        q1 = col.describe()['25%']
-        q2 = col.describe()['50%']
-        q3 = col.describe()['75%']
-        iqr = q3 - q1 #四分位範囲
+    #follower
+    row_follower = data.T[2]
+    row_follower[row_follower > 2000] = 2000
 
-        # 外れ値の基準点
-        outlier_min = q1 - (iqr) * 1.5
-        outlier_max = q3 + (iqr) * 1.5
-
-        # 範囲から外れている値を除く
-        col[col < outlier_min] = None
-        col[col > outlier_max] = None
-
-    return df
+    #favorites
+    row_favorites = data.T[3]
+    row_favorites[row_favorites > 2000] = 2000
 
 
-def build_report(acount1, acount2):
+
+    return data
+
+
+
+def build_report(acount1):
     import pandas as pd
     import pandas_profiling
     X1, labels = build_X(acount1)
-    X2, labels = build_X(acount2)
+    #X1 = threshold(X1)
     df1 = pd.DataFrame(X1)
-
-    df2 = pd.DataFrame(X2)
-
-    df1 = outlier_iqr(df1)
-
     df1 =  df1.rename(columns={
         0:"tweets",
         1:"following",
         2:"follower",
-        3: "favorites"
+        3:"favorites"
     })
     profile_report = pandas_profiling.ProfileReport(df1)
-    profile_report.to_file("report.html")
+    profile_report.to_file("./MyHtmlTemplete/report_{}.html".format(acount1))
 
 
 
-    from jinja2 import Template
-    html= ""
-    with open("./MyHtmlTemplete/test.html") as f:
-        html = f.read()
 
 
-    template = Template(html)
-    data = {
-    'a_variable' : 'わっふる',
-    'navigation' : [
-        {'href':'http://hogehoge1', 'caption': 'test1'},
-        {'href':'http://hogehoge2', 'caption': 'test2'}
-    ]
-    }
-    print (template.render(data))
 
-acounts = ["病み", "リア充","@kuromailserver_1", "tomoyuki1992121","matuki_no_ukiwa1"]
+acounts = ["hahahapartytime","病み","おっぱい" ,"リア充","@kuromailserver_1", "tomoyuki1992121","matuki_no_ukiwa1"]
 #analysis("naokich48445315_follower1")
 #analysis("matuki_no_ukiwa1")
 #print (search_dispersion(acounts[0]) )
 #search_dispersion(acounts[1])
-#plot_two_acount(acounts[0], acounts[1])
+#plot_two_acount(acounts[0], acounts[4])
 #does_can_separate(acounts[0], acounts[1])
 #search_dispersion("tomoyuki1992121")
 #plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
-build_report(acounts[0], acounts[1])
 
+
+build_report(acounts[3])
+"""
+for acount in acounts:
+    build_report(acount)
+
+"""
