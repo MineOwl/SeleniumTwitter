@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cross_validation import train_test_split
 
+import pandas as pd
+
 """
 このコードは
 1,
@@ -119,8 +121,6 @@ def plot_two_acount(acount1, acount2):
 def search_dispersion(acount):
     
     X,  labels = build_X(acount)
-
-    import pandas as pd
 
     print( pd.DataFrame(pd.Series(np.array(X).ravel()).describe()).transpose() )
 

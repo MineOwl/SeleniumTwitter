@@ -8,66 +8,99 @@ import numpy as np
 from sklearn.cross_validation import train_test_split
 
 
+import pandas as pd
+import pandas_profiling
 
-"""
-このコードは
-1,
-2,
-"""
 
-def build_X(acount_name):
 
-    fourNumControler = FourNumControler(acount_name)
 
+class MyAnalysis():
+    def __init__(self,acount_name):
+        self.acount_name = acount_name
+
+    def build_data(self):
+        pass
+    def build_X(self):
+        """
+        return two data
+        X and ["tweets", "following", "follower", "favorites"]
+        """
+        fourNumControler = FourNumControler(self.acount_name)
+        X = []
+
+        def make_class(num, labels):
+            for index, label in enumerate( labels ):
+                if num < label:
+                    return index
+            return len(labels)
+
+        for four_num in fourNumControler.load_four_num():
+            tweets = four_num[1]
+            following = four_num[2]
+            followers = four_num[3] 
+            favorites = four_num[4]
+            X.append( [tweets, following, followers, favorites] )
+
+        return X, ["tweets", "following", "follower", "favorites"]
+
+
+    def build_X_y(self):
+        pass
+
+
+
+
+class AnalysisFourNum(MyAnalysis):
+    def __init__(self, acount_name):
+        super().__init__(acount_name)
     
-    X = []
-    labels = range(0, 500,  100)
-    print(len(labels))
-
-    def make_class(num, labels):
-        for index, label in enumerate( labels ):
-            if num < label:
-                return index
-        return len(labels)
-
-    for four_num in fourNumControler.load_four_num():
-        tweets = four_num[1]
-        following = four_num[2]
-        followers = four_num[3] 
-        favorites = four_num[4]
-        X.append( [tweets, following, followers, favorites] )
-
-
-    return X, ["tweets", "following", "follower", "favorites"]
+    def build_report(self):
+        X1, labels = self.build_X(self.acount_name)
+        #X1 = threshold(X1)
+        df1 = pd.DataFrame(X1)
+        df1 =  df1.rename(columns={
+            0:"tweets",
+            1:"following",
+            2:"follower",
+            3:"favorites"
+        })
+        profile_report = pandas_profiling.ProfileReport(df1)
+        profile_report.to_file("./MyHtmlTemplete/report_{}.html".format(self.acount_name))
 
 
 
 
+class AnalysisFollowersCount(MyAnalysis):
+    def __init__(self, acount_name):
+        super().__init__(acount_name)
 
-def build_X_y(acount_name):
+    def build_X_y(self):
+        fourNumControler = FourNumControler(self.acount_name)
+        X = []
+        y = []
 
-    fourNumControler = FourNumControler(acount_name)
-    X = []
-    y = []
+        labels = range(0, 500,  100)
 
-    labels = range(0, 500,  100)
+        def make_class(num, labels):
+            for index, label in enumerate( labels ):
+                if num < label:
+                    return index
+            return len(labels)
 
-    def make_class(num, labels):
-        for index, label in enumerate( labels ):
-            if num < label:
-                return index
-        return len(labels)
+        for four_num in fourNumControler.load_four_num():
+            tweets = four_num[1]
+            following = four_num[2]
+            followers = four_num[3] 
+            favorites = four_num[4]
+            X.append( [tweets, following, favorites] )
 
-    for four_num in fourNumControler.load_four_num():
-        tweets = four_num[1]
-        following = four_num[2]
-        followers = four_num[3] 
-        favorites = four_num[4]
-        X.append( [tweets, following, favorites] )
+            followers_labeled = make_class(followers, labels)
+            y.append( followers_labeled )
+        return X, y, ["tweets", "following", "favorites"]
 
-        followers_labeled = make_class(followers, labels)
-        y.append( followers_labeled )
-    return X, y, ["tweets", "following", "favorites"]
+
+
+
 
 
 
@@ -192,9 +225,9 @@ acounts = ["hahahapartytime","病み","おっぱい" ,"リア充","@kuromailserv
 #plot_two_acount("tomoyuki1992121","matuki_no_ukiwa1")
 
 
-#build_report(acounts[3])
+build_report(acounts[3])
 
-build_report("@viser0322")
+build_report("viser0322")
 """
 for acount in acounts:
     build_report(acount)

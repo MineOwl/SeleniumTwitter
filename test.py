@@ -27,4 +27,5 @@ checkFourNumDataBank("おっぱい")
 
 checkFourNumDataBank("@kuromailserver_1")
 """
-checkFourNumDataBank("病み")
+#checkFourNumDataBank("病み")
+checkFourNumDataBank("@viser0322")

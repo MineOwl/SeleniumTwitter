@@ -25,6 +25,13 @@ class FourNumControler(PickleControler):
     def load_four_num(self):
         return self.load(self.path)
     
+    def load_clear_acount_database(self):
+        dba = []
+        for name in self.load(self.path):
+            if name[0].startswith("@"):
+                dba.append(name)
+        return dba
+
     def dump_four_num(self, obj):
         self.dump(obj, self.path)
 
